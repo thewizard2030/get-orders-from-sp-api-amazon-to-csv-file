@@ -1,7 +1,3 @@
-from dotenv import load_dotenv
-
-load_dotenv()
-
 REFRESH_TOKEN = "REFRESH_TOKEN"
 LWA_APP_ID = "LWA_APP_ID"
 CLIENT_SECRET = "CLIENT_SECRET"

@@ -4,8 +4,8 @@ from sp_api.api import Orders
 from sp_api.util import throttle_retry, load_all_pages
 import const
 import pandas as pd
+import numpy as np
 import time
-import statistics as st
 
 
 @throttle_retry()
@@ -85,140 +85,18 @@ orders = {
 
 }
 
+orders_data = dict(
+    AmazonOrderId=np.array([AmazonOrderId]),
+    PurchaseDate=np.array([PurchaseDate_list]),
+    OrderStatus=np.array([OrderStatus_list]),
+    PaymentMethod=np.array([PaymentMethod]),
+    MarketplaceId=np.array([MarketplaceId]),
+    ShipmentServiceLevelCategory=np.array([ShipmentServiceLevelCategory]),
+    OrderType=np.array([OrderType_list])
 
+)
 
-def samelen(list1, list2, list3, list4, list5, list6, list7):
+new_df = pd.DataFrame(dict([(k, pd.Series(v.flatten())) for k, v in orders_data.items()]))
 
-    # if length are not equal
-    if len(list1) != len(list2) or len(list3) != len(list4) or len(list5) != len(list6) or len(list6) != len(list7):
-        # Append mean values to the list with smaller length
-        if len(list1) > len(list2):
-            mean_width = st.mean(list2)
-            list2 += (len(list1) - len(list2)) * [mean_width]
-            col = {
-                'AmazonOrderId': list1,
-                'PurchaseDate': list2,
-                'OrderStatus': list3,
-                # 'OrderTotal': OrderTotal_list,
-                'PaymentMethod': list4,
-                'MarketplaceId': list5,
-                'ShipmentServiceLevelCategory': list6,
-                'OrderType': list7
-            }
-            return col
-        elif len(list1) < len(list2):
-            mean_length = st.mean(list1)
-            list1 += (len(list2) - len(list1)) * [mean_length]
-            col = {
-                'AmazonOrderId': list1,
-                'PurchaseDate': list2,
-                'OrderStatus': list3,
-                # 'OrderTotal': OrderTotal_list,
-                'PaymentMethod': list4,
-                'MarketplaceId': list5,
-                'ShipmentServiceLevelCategory': list6,
-                'OrderType': list7
-            }
-            return col
-        elif len(list3) > len(list4):
-            mean_width = st.mean(list4)
-            list4 += (len(list3) - len(list4)) * [mean_width]
-            col = {
-                'AmazonOrderId': list1,
-                'PurchaseDate': list2,
-                'OrderStatus': list3,
-                # 'OrderTotal': OrderTotal_list,
-                'PaymentMethod': list4,
-                'MarketplaceId': list5,
-                'ShipmentServiceLevelCategory': list6,
-                'OrderType': list7
-            }
-            return col
-        elif len(list3) < len(list4):
-            mean_width = st.mean(list3)
-            list3 += (len(list4) - len(list3)) * [mean_width]
-            col = {
-                'AmazonOrderId': list1,
-                'PurchaseDate': list2,
-                'OrderStatus': list3,
-                # 'OrderTotal': OrderTotal_list,
-                'PaymentMethod': list4,
-                'MarketplaceId': list5,
-                'ShipmentServiceLevelCategory': list6,
-                'OrderType': list7
-            }
-            return col
-        elif len(list5) > len(list6):
-            mean_width = st.mean(list6)
-            list6 += (len(list5) - len(list6)) * [mean_width]
-            col = {
-                'AmazonOrderId': list1,
-                'PurchaseDate': list2,
-                'OrderStatus': list3,
-                # 'OrderTotal': OrderTotal_list,
-                'PaymentMethod': list4,
-                'MarketplaceId': list5,
-                'ShipmentServiceLevelCategory': list6,
-                'OrderType': list7
-            }
-            return col
-        elif len(list5) < len(list6):
-            mean_width = st.mean(list5)
-            list5 += (len(list6) - len(list5)) * [mean_width]
-            col = {
-                'AmazonOrderId': list1,
-                'PurchaseDate': list2,
-                'OrderStatus': list3,
-                # 'OrderTotal': OrderTotal_list,
-                'PaymentMethod': list4,
-                'MarketplaceId': list5,
-                'ShipmentServiceLevelCategory': list6,
-                'OrderType': list7
-            }
-            return col
-        elif len(list6) > len(list7):
-            mean_width = st.mean(list7)
-            list7 += (len(list6) - len(list7)) * [mean_width]
-            col = {
-                'AmazonOrderId': list1,
-                'PurchaseDate': list2,
-                'OrderStatus': list3,
-                # 'OrderTotal': OrderTotal_list,
-                'PaymentMethod': list4,
-                'MarketplaceId': list5,
-                'ShipmentServiceLevelCategory': list6,
-                'OrderType': list7
-            }
-            return col
-        elif len(list6) < len(list7):
-            mean_width = st.mean(list6)
-            list6 += (len(list7) - len(list6)) * [mean_width]
-            col = {
-                'AmazonOrderId': list1,
-                'PurchaseDate': list2,
-                'OrderStatus': list3,
-                # 'OrderTotal': OrderTotal_list,
-                'PaymentMethod': list4,
-                'MarketplaceId': list5,
-                'ShipmentServiceLevelCategory': list6,
-                'OrderType': list7
-            }
-            return col
-    else:
-        col = {
-            'AmazonOrderId': list1,
-            'PurchaseDate': list2,
-            'OrderStatus': list3,
-            # 'OrderTotal': OrderTotal_list,
-            'PaymentMethod': list4,
-            'MarketplaceId': list5,
-            'ShipmentServiceLevelCategory': list6,
-            'OrderType': list7
-        }
-        return col
-
-
-new_data = samelen(AmazonOrderId, PurchaseDate_list, OrderStatus_list, PaymentMethod_list, MarketplaceId_list, ShipmentServiceLevelCategory_list, OrderType_list)
-df = pd.DataFrame(new_data)
-
-df.to_csv('orders.csv')
+print(new_df)
+new_df.to_csv('orders.csv')
