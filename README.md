@@ -22,6 +22,7 @@ ROLE_ARN = "arn:aws:iam::xxxxxxxxxxxxxxxxx"
 ```
 python-amazon-sp-api 0.16.0
 pandas 1.4.3
+numpy 1.23.3
 ```
 #### 4- Running Script:
 ```
